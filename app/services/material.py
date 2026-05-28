@@ -1,5 +1,6 @@
 import os
 import random
+import threading
 from typing import List
 from urllib.parse import urlencode
 
@@ -12,7 +13,8 @@ from app.models.schema import MaterialInfo, VideoAspect, VideoConcatMode
 from app.utils import utils
 from app.services import semantic_video
 
-requested_count = 0
+_requested_count = 0
+_requested_count_lock = threading.Lock()
 
 
 def get_api_key(cfg_key: str):
@@ -27,9 +29,10 @@ def get_api_key(cfg_key: str):
     if isinstance(api_keys, str):
         return api_keys
 
-    global requested_count
-    requested_count += 1
-    return api_keys[requested_count % len(api_keys)]
+    global _requested_count
+    with _requested_count_lock:
+        _requested_count += 1
+        return api_keys[_requested_count % len(api_keys)]
 
 
 def search_videos_pexels(
@@ -55,7 +58,6 @@ def search_videos_pexels(
             query_url,
             headers=headers,
             proxies=config.proxy,
-            verify=False,
             timeout=(30, 60),
         )
         response = r.json()
@@ -119,7 +121,7 @@ def search_videos_pixabay(
 
     try:
         r = requests.get(
-            query_url, proxies=config.proxy, verify=False, timeout=(30, 60)
+            query_url, proxies=config.proxy, timeout=(30, 60)
         )
         response = r.json()
         video_items = []
@@ -189,7 +191,6 @@ def save_video(video_url: str, save_dir: str = "", search_term: str = "", thumbn
                 video_url,
                 headers=headers,
                 proxies=config.proxy,
-                verify=False,
                 timeout=(60, 240),
             ).content
         )

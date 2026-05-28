@@ -117,7 +117,7 @@ def delete_files(files: List[str] | str):
     for file in files:
         try:
             os.remove(file)
-        except:
+        except OSError:
             pass
 
 def get_bgm_file(bgm_type: str = "random", bgm_file: str = ""):
@@ -706,7 +706,7 @@ def create_enhanced_subtitle_clips(enhanced_subtitle_path, params, video_width, 
         """Create an image with specific words highlighted"""
         try:
             font = ImageFont.truetype(font_path, font_size)
-        except:
+        except (IOError, OSError):
             font = ImageFont.load_default()
         
         # Clean text: remove commas but keep line breaks they indicate

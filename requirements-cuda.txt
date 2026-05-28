@@ -31,9 +31,6 @@ sentence-transformers>=2.2.0
 scikit-learn>=1.3.0
 
 # TTS Integration
-edge_tts==6.1.19
+edge_tts==7.0.2
 faster-whisper==1.1.0
 
-# Note: After installing these packages, run:
-# pip install nvidia-cudnn-cu12==8.9.2.26 --force-reinstall --no-deps
-# This installs cuDNN 8.x for compatibility (manual dual installation) 

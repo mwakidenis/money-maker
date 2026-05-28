@@ -919,6 +919,8 @@ with middle_panel:
         if saved_voice_name_index >= len(friendly_names) and friendly_names:
             saved_voice_name_index = 0
 
+        voice_name = ""
+
         # 确保有声音可选
         if friendly_names:
             selected_friendly_name = st.selectbox(

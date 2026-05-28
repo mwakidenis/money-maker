@@ -389,9 +389,9 @@ def calculate_text_image_similarity(text: str, image_url: str, model_name: str =
                 safe_log("warning", "🔄 Memory/CUDA error detected, resetting model...")
                 try:
                     reset_clip_model()
-                except:
+                except Exception:
                     pass
-            
+
             return 0.0
         finally:
             # Aggressive cleanup to prevent memory leaks - no debug logging
@@ -432,7 +432,7 @@ def calculate_text_image_similarity(text: str, image_url: str, model_name: str =
                 import torch
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
-        except:
+        except Exception:
             pass
         return 0.0
 
@@ -484,7 +484,6 @@ def download_image(image_url: str) -> Optional[Image.Image]:
             image_url, 
             headers=headers, 
             proxies=config.proxy,
-            verify=False,
             timeout=30
         )
         response.raise_for_status()
@@ -627,9 +626,9 @@ def reset_clip_model():
             import torch
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
-        except:
+        except Exception:
             pass
-            
+
         safe_log("info", "✅ CLIP model reset completed")
         
     except Exception as e:
@@ -672,7 +671,7 @@ def safe_log(level: str, message: str):
             log_level = getattr(logging, level.upper(), logging.INFO)
             logging.log(log_level, message)
             return
-        except:
+        except Exception:
             # Ultimate fallback - just print
             print(f"[{level.upper()}] {message}")
             return
@@ -696,5 +695,5 @@ def safe_log(level: str, message: str):
         try:
             log_level = getattr(logging, level.upper(), logging.INFO)
             logging.log(log_level, message)
-        except:
-            print(f"[{level.upper()}] {message}") 
+        except Exception:
+            print(f"[{level.upper()}] {message}")

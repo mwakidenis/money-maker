@@ -252,9 +252,9 @@ def find_best_video_for_sentence(
                         if hasattr(image_similarity, 'force_model_reset') and "timeout" in str(e).lower():
                             logger.warning("🔄 Timeout detected, forcing model reset...")
                             image_similarity.force_model_reset()
-                    except:
+                    except Exception:
                         pass
-                        
+
                     image_similarity_score = 0.0
             
             # Combine text and image similarity scores
